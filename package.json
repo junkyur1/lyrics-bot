@@ -5,9 +5,9 @@
   "main": "bot.js",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "twitter-api-v2": "^1.23.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
