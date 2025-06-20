@@ -2,7 +2,7 @@ name: Lyric Bot
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Runs every hour (UTC)
+    - cron: '*/30 * * * *'  # Every 30 minutes
   workflow_dispatch:      # Optional: lets you trigger manually
 
 jobs:
