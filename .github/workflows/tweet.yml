@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Log workflow start
+        run: echo "✅ workflow started at $(date)"
+
       - name: Install dependencies
         run: npm install
 
