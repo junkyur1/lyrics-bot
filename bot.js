@@ -2,14 +2,6 @@ const { TwitterApi } = require('twitter-api-v2');
 const fs = require('fs');
 require('dotenv').config();
 
-// Log partial keys to confirm env is working
-console.log("🔐 Loaded Keys:", {
-  TWITTER_API_KEY: process.env.TWITTER_API_KEY?.slice(0, 5),
-  TWITTER_API_SECRET: process.env.TWITTER_API_SECRET?.slice(0, 5),
-  TWITTER_ACCESS_TOKEN: process.env.TWITTER_ACCESS_TOKEN?.slice(0, 5),
-  TWITTER_ACCESS_SECRET: process.env.TWITTER_ACCESS_SECRET?.slice(0, 5),
-});
-
 const client = new TwitterApi({
   appKey: process.env.TWITTER_API_KEY,
   appSecret: process.env.TWITTER_API_SECRET,
