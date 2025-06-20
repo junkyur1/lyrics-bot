@@ -1,6 +1,10 @@
 const { TwitterApi } = require('twitter-api-v2');
 const fs = require('fs');
 require('dotenv').config();
+console.log("✅ API Key:", process.env.TWITTER_API_KEY?.slice(0, 5));
+console.log("✅ API Secret:", process.env.TWITTER_API_SECRET?.slice(0, 5));
+console.log("✅ Access Token:", process.env.TWITTER_ACCESS_TOKEN?.slice(0, 5));
+console.log("✅ Access Secret:", process.env.TWITTER_ACCESS_SECRET?.slice(0, 5));
 
 console.log('Bot is running with API v2');
 
