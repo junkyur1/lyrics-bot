@@ -1,77 +1,33 @@
 const { TwitterApi } = require('twitter-api-v2');
 const fs = require('fs');
 require('dotenv').config();
-console.log("✅ API Key:", process.env.TWITTER_API_KEY?.slice(0, 5));
-console.log("✅ API Secret:", process.env.TWITTER_API_SECRET?.slice(0, 5));
-console.log("✅ Access Token:", process.env.TWITTER_ACCESS_TOKEN?.slice(0, 5));
-console.log("✅ Access Secret:", process.env.TWITTER_ACCESS_SECRET?.slice(0, 5));
 
-console.log('Bot is running with API v2');
-
+// Initialize Twitter client with your secrets
 const client = new TwitterApi({
-  appKey: process.env.TWITTER_API_KEY,
-  appSecret: process.env.TWITTER_API_SECRET,
+  appKey: process.env.TWITTER_CONSUMER_KEY,
+  appSecret: process.env.TWITTER_CONSUMER_SECRET,
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
   accessSecret: process.env.TWITTER_ACCESS_SECRET,
 });
 
-const rwClient = client.readWrite; // Required to send tweets
-
-const order = 4; // length of each n-gram
-let nGrams = {};
-
-function pickRandomStart(lyrics) {
-  const random = Math.floor(Math.random() * lyrics.length);
-  return lyrics.substring(random, random + order);
-}
-
-function makeEngramModel(lyrics) {
-  for (let i = 0; i < lyrics.length - order; i++) {
-    const gram = lyrics.substring(i, i + order);
-
-    if (!nGrams[gram]) {
-      nGrams[gram] = [];
-    }
-    nGrams[gram].push(lyrics.charAt(i + order));
-  }
-}
-
-function generateTweet(lyrics) {
-  makeEngramModel(lyrics);
-  let currentGram = pickRandomStart(lyrics);
-
-  while (!currentGram.match(/^[0-9a-zA-Z]+$/)) {
-    currentGram = pickRandomStart(lyrics);
-  }
-
-  let tweet = currentGram;
-
-  for (
-    let j = 0;
-    (j < 150) || tweet.charAt(j).match(/^[0-9a-zA-Z]+$/);
-    j++
-  ) {
-    const possibilities = nGrams[currentGram];
-    const next = possibilities[Math.floor(Math.random() * possibilities.length)];
-    tweet += next;
-    const len = tweet.length;
-    currentGram = tweet.substring(len - order, len);
-  }
-
-  return tweet;
-}
-
-async function postTweet() {
+async function tweetRandomLyric() {
   try {
-    const lyrics = fs.readFileSync('lyrics.txt', 'utf8');
-    const tweet = generateTweet(lyrics);
-    console.log('Generated tweet:\n', tweet);
+    // Read and split lyrics file by lines
+    const lyrics = fs.readFileSync('lyrics.txt', 'utf8')
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0 && line.length <= 280); // Max tweet length
 
-    await rwClient.v2.tweet(tweet);
+    // Pick one random line
+    const randomLyric = lyrics[Math.floor(Math.random() * lyrics.length)];
+    console.log('Tweeting:', randomLyric);
+
+    // Post it to Twitter
+    await client.v2.tweet(randomLyric);
     console.log('✅ Tweet posted!');
   } catch (error) {
     console.error('❌ Error:', error.message);
   }
 }
 
-postTweet();
+tweetRandomLyric();
